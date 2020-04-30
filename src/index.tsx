@@ -7,7 +7,8 @@ import App from './App';
 import { store } from './state/store';
 import * as serviceWorker from './serviceWorker';
 
-const persistor = getPersistor();
+// TODO: Add Redux Persist Plugin as Gate
+// const persistor = getPersistor();
 
 ReactDOM.render(
   <React.StrictMode>
