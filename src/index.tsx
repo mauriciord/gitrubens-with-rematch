@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { getPersistor } from '@rematch/persist';
+import { createGlobalStyle } from 'styled-components';
+import { normalize } from 'polished';
+import 'antd/dist/antd.css';
 
 import App from './App';
 import { store } from './state/store';
@@ -10,10 +13,15 @@ import * as serviceWorker from './serviceWorker';
 // TODO: Add Redux Persist Plugin as Gate
 // const persistor = getPersistor();
 
+const GlobalStyle = createGlobalStyle`${normalize()}`;
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <>
+        <GlobalStyle />
+        <App />
+      </>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
