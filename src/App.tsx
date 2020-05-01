@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Drawer, List, Avatar } from 'antd';
+import { List, Avatar, AutoComplete } from 'antd';
 import * as Yup from 'yup';
+
 import { iRootState, Dispatch } from './state/store';
 import { User } from './state/users/types';
 import {
@@ -13,7 +14,12 @@ import {
   SearchForm,
   FormItem,
 } from './shared/common/styles';
-import { Profile } from './features/users';
+import { SearchQuery } from './state/searchHistory/types';
+import { debounce } from './shared/hooks';
+
+type Options = {
+  value: SearchQuery;
+};
 
 const searchFormSchema = Yup.object().shape({
   query: Yup.string()
@@ -21,10 +27,13 @@ const searchFormSchema = Yup.object().shape({
     .required('This field cannot be empty'),
 });
 
-function App() {
+const App = () => {
   const userListIds = useSelector((state: iRootState) => state.users.result);
   const userList: User[] = useSelector(
     (state: iRootState) => state.users.entities.users
+  );
+  const options: Options[] = useSelector((state: iRootState) =>
+    state.searchHistory.map((value: string) => ({ value }))
   );
   const dispatch = useDispatch<Dispatch>();
   const form = useFormik({
@@ -33,73 +42,55 @@ function App() {
     },
     validationSchema: searchFormSchema,
     onSubmit: ({ query }) => {
-      // alert(JSON.stringify(values, null, 2));
       dispatch.users.searchUserByQuery(query);
     },
   });
-  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState<User | null>(null);
-
-  const handleItemClick = useCallback(
-    (username) => dispatch.repos.searchReposByUser(username),
-    [dispatch.repos]
-  );
 
   return (
     <Cover>
-      <>
-        <Wrapper>
-          <Logo />
-          <SearchForm layout="vertical" onSubmitCapture={form.handleSubmit}>
-            <FormItem
-              validateStatus={form.errors?.query && 'error'}
-              help={form.errors?.query}
+      <Wrapper>
+        <Logo />
+        <SearchForm layout="vertical">
+          <FormItem
+            validateStatus={form.errors?.query && 'error'}
+            help={form.errors?.query}
+          >
+            <AutoComplete
+              value={form.values.query}
+              style={{ width: '100%' }}
+              options={options}
+              onSelect={(value: string) => form.setFieldValue('query', value)}
             >
               <Search
                 name="query"
-                value={form.values.query}
                 onChange={form.handleChange}
                 placeholder="input a github username"
                 enterButton="Search"
                 size="large"
                 onSearch={() => form.handleSubmit()}
               />
-            </FormItem>
-          </SearchForm>
-          {userListIds && userListIds.length > 0 && (
-            <List
-              itemLayout="horizontal"
-              dataSource={userListIds}
-              bordered
-              renderItem={(id: number) => (
-                <List.Item
-                  onClick={() => {
-                    setSelectedProfile(userList[id]);
-                    setIsDrawerVisible(true);
-                  }}
-                >
-                  <List.Item.Meta
-                    avatar={<Avatar src={userList[id].avatar_url} />}
-                    title={userList[id].login}
-                    description={userList[id].url}
-                  />
-                </List.Item>
-              )}
-            />
-          )}
-        </Wrapper>
-        <Drawer
-          width="90%"
-          placement="right"
-          closable={false}
-          onClose={() => setIsDrawerVisible(false)}
-          visible={isDrawerVisible}
-        >
-          {selectedProfile && <Profile user={selectedProfile} />}
-        </Drawer>
-      </>
+            </AutoComplete>
+          </FormItem>
+        </SearchForm>
+        {userListIds && userListIds.length > 0 && (
+          <List
+            itemLayout="horizontal"
+            dataSource={userListIds}
+            bordered
+            renderItem={(id: number) => (
+              <List.Item key={`search-list-profile-${id}`}>
+                <List.Item.Meta
+                  avatar={<Avatar src={userList[id].avatar_url} />}
+                  title={userList[id].login}
+                  description={userList[id].url}
+                />
+              </List.Item>
+            )}
+          />
+        )}
+      </Wrapper>
     </Cover>
   );
-}
+};
 
 export default App;
