@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { List, Avatar, AutoComplete } from 'antd';
@@ -15,7 +15,6 @@ import {
   FormItem,
 } from './shared/common/styles';
 import { SearchQuery } from './state/searchHistory/types';
-import { debounce } from './shared/hooks';
 
 type Options = {
   value: SearchQuery;

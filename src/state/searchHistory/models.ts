@@ -1,6 +1,3 @@
-import { Dispatch } from '../store';
-import githubAPI from '../../services/github';
-
 import { SearchQuery } from './types';
 
 type State = SearchQuery[];
