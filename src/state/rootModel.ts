@@ -1,3 +1,12 @@
-export interface RootModel {}
+import { users } from './users/models';
+import { repos } from './repos/models';
 
-export const models: RootModel = {};
+export interface RootModel {
+  users: typeof users;
+  repos: typeof repos;
+}
+
+export const models: RootModel = {
+  users,
+  repos,
+};

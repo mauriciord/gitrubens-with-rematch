@@ -3,14 +3,16 @@ import selectPlugin from '@rematch/select';
 import createRematchPersist from '@rematch/persist';
 
 import { RootModel } from './rootModel';
+import { models } from './rootModel';
 
 const persistPlugin = createRematchPersist({
-  whitelist: [],
+  whitelist: ['users'],
   throttle: 5000,
-  version: 1,
+  version: 2,
 });
 
 export const store = init({
+  models,
   plugins: [selectPlugin(), persistPlugin],
 });
 

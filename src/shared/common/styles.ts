@@ -1,20 +1,20 @@
 import styled from 'styled-components';
-import { backgroundImages, between, cover } from 'polished';
+import { Input, Form } from 'antd';
 
 import logo from '../../assets/images/logo.png';
 
 export const Cover = styled.div`
-  ${cover()};
+  width: calc(100vw - 20px);
+  height: calc(100vh - 60px);
   background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 30px 5px;
+  margin: auto;
 `;
 
 export const Wrapper = styled.div`
   display: flex;
+  height: calc(100vh - 60px);
+  margin: auto;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -30,4 +30,21 @@ export const Logo = styled.img.attrs(() => ({
   width: 220px;
   height: auto;
   margin-bottom: 20px;
+`;
+
+export const SearchForm = styled(Form)`
+  display: flex;
+  align-self: stretch;
+`;
+
+export const FormItem = styled(Form.Item)`
+  display: flex;
+  align-self: stretch;
+  width: 100%;
+`;
+
+export const Search = styled(Input.Search)`
+  display: flex;
+  align-self: stretch;
+  width: 100%;
 `;

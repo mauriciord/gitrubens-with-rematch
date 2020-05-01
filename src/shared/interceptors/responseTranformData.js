@@ -1,3 +1,5 @@
+const hasEnvelopedData = (response) => response.data && response.data.data;
+
 const interceptorResponseTransformData = (response) => {
   try {
     const responseData = hasEnvelopedData(response)
