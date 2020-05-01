@@ -4,17 +4,17 @@ import { useFormik } from 'formik';
 import { List, Avatar, AutoComplete } from 'antd';
 import * as Yup from 'yup';
 
-import { iRootState, Dispatch } from './state/store';
-import { User } from './state/users/types';
+import { iRootState, Dispatch } from '../../state/store';
+import { User } from '../../state/users/types';
 import {
   Cover,
   Wrapper,
   Logo,
   Search,
-  SearchForm,
+  SearchForm as Form,
   FormItem,
-} from './shared/common/styles';
-import { SearchQuery } from './state/searchHistory/types';
+} from '../../shared/common/styles';
+import { SearchQuery } from '../../state/searchHistory/types';
 
 type Options = {
   value: SearchQuery;
@@ -26,7 +26,7 @@ const searchFormSchema = Yup.object().shape({
     .required('This field cannot be empty'),
 });
 
-const App = () => {
+const SearchForm = () => {
   const userListIds = useSelector((state: iRootState) => state.users.result);
   const userList: User[] = useSelector(
     (state: iRootState) => state.users.entities.users
@@ -49,7 +49,7 @@ const App = () => {
     <Cover>
       <Wrapper>
         <Logo />
-        <SearchForm layout="vertical">
+        <Form layout="vertical">
           <FormItem
             validateStatus={form.errors?.query && 'error'}
             help={form.errors?.query}
@@ -70,7 +70,7 @@ const App = () => {
               />
             </AutoComplete>
           </FormItem>
-        </SearchForm>
+        </Form>
         {userListIds && userListIds.length > 0 && (
           <List
             itemLayout="horizontal"
@@ -92,4 +92,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default SearchForm;

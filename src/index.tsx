@@ -8,7 +8,7 @@ import { normalize } from 'polished';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import 'antd/dist/antd.css';
 
-import App from './App';
+import Routes from './routes/Routes';
 import { store } from './state/store';
 import * as serviceWorker from './serviceWorker';
 
@@ -22,7 +22,7 @@ ReactDOM.render(
       <PersistGate persistor={persistor}>
         <>
           <GlobalStyle />
-          <App />
+          <Routes />
         </>
       </PersistGate>
     </Provider>
