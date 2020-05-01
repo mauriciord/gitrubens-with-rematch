@@ -37,6 +37,7 @@ export const users = {
       const response = data.items.map((item: any) => ({ ...item }));
 
       dispatch.users.addUsers(normalize(response, schema.arrayOfUsers));
+      dispatch.searchHistory.addQuery(query);
     },
   }),
 };

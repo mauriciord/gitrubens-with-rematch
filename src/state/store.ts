@@ -6,7 +6,7 @@ import { RootModel } from './rootModel';
 import { models } from './rootModel';
 
 const persistPlugin = createRematchPersist({
-  whitelist: ['users'],
+  whitelist: ['users', 'searchHistory'],
   throttle: 5000,
   version: 2,
 });

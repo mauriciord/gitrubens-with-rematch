@@ -12,7 +12,6 @@ import App from './App';
 import { store } from './state/store';
 import * as serviceWorker from './serviceWorker';
 
-// TODO: Add Redux Persist Plugin as Gate
 const persistor = getPersistor();
 
 const GlobalStyle = createGlobalStyle`${normalize()}`;
