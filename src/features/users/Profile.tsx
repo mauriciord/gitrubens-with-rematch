@@ -8,6 +8,7 @@ import { Dispatch, iRootState } from '../../state/store';
 import { ProfileProps } from '../../state/profile/types';
 import { Cover, Wrapper } from '../../shared/common/styles';
 import { Repository, RepoList } from '../../state/repos/types';
+import { RepoListActions } from './styles';
 
 const { Meta } = Card;
 
@@ -63,14 +64,7 @@ const Profile = () => {
     repoListIds.length > 0 &&
     lastPageOfRepos &&
     reposCurrentPage < lastPageOfRepos ? (
-      <div
-        style={{
-          textAlign: 'center',
-          marginTop: 12,
-          height: 32,
-          lineHeight: '32px',
-        }}
-      >
+      <RepoListActions>
         <Button
           onClick={() => {
             const nextPage = reposCurrentPage + 1;
@@ -78,9 +72,9 @@ const Profile = () => {
             dispatch.repos.searchReposByUser({ user: slug, page: nextPage });
           }}
         >
-          loading more
+          load more
         </Button>
-      </div>
+      </RepoListActions>
     ) : null;
 
   return (
@@ -100,8 +94,8 @@ const Profile = () => {
               />
             </Card>
           )}
-          <br />
-          <Descriptions title="User Info" bordered size="small">
+          <Divider orientation="left">User Info</Divider>
+          <Descriptions bordered size="small">
             <Descriptions.Item label="Company">
               {profileMainInfo.company}
             </Descriptions.Item>
@@ -127,7 +121,6 @@ const Profile = () => {
           <Divider orientation="left">Repos</Divider>
           <List
             size="small"
-            footer={<div>Footer</div>}
             bordered
             dataSource={repoListIds}
             loadMore={loadMore}
