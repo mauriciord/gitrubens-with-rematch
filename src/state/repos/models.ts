@@ -4,7 +4,7 @@ import { Dispatch } from '../store';
 import githubAPI from '../../services/github';
 import * as schema from './schema';
 
-import { Repository, RepoList } from './types';
+import { RepoList } from './types';
 import { FindParams } from '../../services/github/repos';
 
 type State = {

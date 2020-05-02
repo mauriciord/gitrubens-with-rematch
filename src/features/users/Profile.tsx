@@ -5,18 +5,9 @@ import { Descriptions, Card, Divider, List, Button, PageHeader } from 'antd';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import { Dispatch, iRootState } from '../../state/store';
-import { User } from '../../state/users/types';
 import { ProfileProps } from '../../state/profile/types';
-import {
-  Cover,
-  Wrapper,
-  Logo,
-  Search,
-  SearchForm as Form,
-  FormItem,
-} from '../../shared/common/styles';
+import { Cover, Wrapper } from '../../shared/common/styles';
 import { Repository, RepoList } from '../../state/repos/types';
-import { repo } from '../../state/repos/schema';
 
 const { Meta } = Card;
 
@@ -50,7 +41,7 @@ const Profile = () => {
   const handleOnBackHeader = useCallback(() => {
     history.replace(from);
     dispatch.profile.cleanProfileAsync();
-  }, [history, dispatch.repos]);
+  }, [history, dispatch.profile, from]);
 
   useEffect(() => {
     dispatch.profile.fetchProfileInfoByUsername(slug);
@@ -147,7 +138,11 @@ const Profile = () => {
                 <List.Item
                   actions={[
                     repository.homepage && (
-                      <a href={repository.homepage} target="_blank">
+                      <a
+                        href={repository.homepage}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         Homepage
                       </a>
                     ),
