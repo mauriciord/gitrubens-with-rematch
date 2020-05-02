@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { List, Avatar, AutoComplete } from 'antd';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 
 import { iRootState, Dispatch } from '../../state/store';
 import { User } from '../../state/users/types';
@@ -78,11 +79,13 @@ const SearchForm = () => {
             bordered
             renderItem={(id: number) => (
               <List.Item key={`search-list-profile-${id}`}>
-                <List.Item.Meta
-                  avatar={<Avatar src={userList[id].avatar_url} />}
-                  title={userList[id].login}
-                  description={userList[id].url}
-                />
+                <Link to={`/profile/${userList[id].login}`}>
+                  <List.Item.Meta
+                    avatar={<Avatar src={userList[id].avatar_url} />}
+                    title={userList[id].login}
+                    description={userList[id].url}
+                  />
+                </Link>
               </List.Item>
             )}
           />

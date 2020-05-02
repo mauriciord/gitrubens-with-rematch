@@ -1,6 +1,6 @@
 import api from './api';
 
-type FindParams = {
+export type FindParams = {
   user: string;
   page?: number;
   per_page?: number;
@@ -10,10 +10,10 @@ type FindParams = {
 
 export const findReposFromUser = ({
   user,
-  page,
-  per_page,
-  order,
-  sort,
+  page = 1,
+  per_page = 30,
+  order = 'desc',
+  sort = 'updated_at',
 }: FindParams) =>
   api.get(`/users/${user}/repos`, {
     params: {

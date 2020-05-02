@@ -4,18 +4,21 @@ import { Dispatch } from '../store';
 import githubAPI from '../../services/github';
 import * as schema from './schema';
 
-import { Repository } from './types';
+import { Repository, RepoList } from './types';
+import { FindParams } from '../../services/github/repos';
 
 type State = {
+  // filter: string;
   entities: {
-    repos: Repository[];
+    repos: RepoList;
   };
   result: number[];
 };
 
 export const repos = {
   state: {
-    entities: { repos: [] },
+    // filter: 'desc',
+    entities: { repos: {} },
     result: [],
   },
   reducers: {
@@ -26,15 +29,24 @@ export const repos = {
       } = payload;
 
       return {
-        entities: { repos },
-        result,
+        ...state,
+        entities: { repos: { ...state.entities.repos, ...repos } },
+        result: [...state.result, ...result],
+      };
+    },
+    cleanRepos(state: State) {
+      return {
+        ...state,
+        entities: { repos: {} },
+        result: [],
       };
     },
   },
   effects: (dispatch: Dispatch) => ({
-    async searchReposByUser(queryUser: string) {
+    async searchReposByUser({ user, page, ...rest }: FindParams) {
       const { data: response } = await githubAPI.repos.findReposFromUser({
-        user: queryUser,
+        user,
+        page,
       });
 
       dispatch.repos.addRepos(normalize(response, schema.arrayOfRepos));

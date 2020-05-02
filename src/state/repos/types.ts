@@ -75,3 +75,5 @@ export type Repository = {
   watchers: number;
   default_branch: string;
 };
+
+export type RepoList = { [key: number]: Repository } | void;

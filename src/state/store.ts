@@ -16,6 +16,8 @@ export const store = init({
   plugins: [selectPlugin(), persistPlugin],
 });
 
+export const { select } = store;
+
 export type Store = typeof store;
 export type Dispatch = RematchDispatch<RootModel>;
 export type iRootState = RematchRootState<RootModel>;

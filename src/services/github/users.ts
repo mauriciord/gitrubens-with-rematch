@@ -18,3 +18,6 @@ export const findUser = ({ query, page, per_page, order, sort }: FindParams) =>
       ...(sort && { sort }),
     },
   });
+
+export const getProfileInfoByUsername = (username: string) =>
+  api.get(`/users/${username}`);
