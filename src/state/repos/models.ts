@@ -41,6 +41,12 @@ export const repos = {
         result: [],
       };
     },
+    setSortedReposIds(state: State, payload: number[]) {
+      return {
+        ...state,
+        result: payload,
+      };
+    },
   },
   effects: (dispatch: Dispatch) => ({
     async searchReposByUser({ user, page, ...rest }: FindParams) {

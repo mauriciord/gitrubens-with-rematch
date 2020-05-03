@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, List, Select } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RepoListActions, RepoListHeader, FilterLabel } from './styles';
 import { Dispatch, iRootState } from '../../state/store';
 import { Repository, RepoList } from '../../state/repos/types';
+import { useFormik } from 'formik';
+import orderBy from 'lodash.orderby';
 
 type RepositoryListProps = {
   lastPageOfRepos?: number;
@@ -19,6 +21,20 @@ const RepositoryList = ({ lastPageOfRepos, username }: RepositoryListProps) => {
     (state: iRootState) => state.repos.entities.repos
   );
   const [reposCurrentPage, setReposCurrentPage] = useState(1);
+  const formik = useFormik({
+    initialValues: {
+      filter: 'desc',
+    },
+    onSubmit: ({ filter }) => {
+      // @ts-ignore
+      const sortedRepos = orderBy(repoList, ['updated_at'], [filter]);
+
+      dispatch.repos.setSortedReposIds(
+        Object.keys(sortedRepos).map((key: string) => parseInt(key))
+      );
+    },
+  });
+
   const loadMore = repoListIds.length > 0 &&
     lastPageOfRepos &&
     reposCurrentPage < lastPageOfRepos && (
@@ -39,8 +55,19 @@ const RepositoryList = ({ lastPageOfRepos, username }: RepositoryListProps) => {
     );
 
   useEffect(() => {
-    dispatch.repos.searchReposByUser({ user: username });
-  }, [dispatch.repos, username]);
+    dispatch.repos.searchReposByUser({
+      user: username,
+      order: formik.values.filter,
+    });
+  }, [dispatch.repos, username, formik.values.filter]);
+
+  const handleFormFilterChange = useCallback(
+    (value: string) => {
+      formik.setFieldValue('filter', value);
+      formik.handleSubmit();
+    },
+    [formik]
+  );
 
   return (
     <List
@@ -48,10 +75,16 @@ const RepositoryList = ({ lastPageOfRepos, username }: RepositoryListProps) => {
       header={
         <RepoListHeader>
           <FilterLabel>Order by:</FilterLabel>
-          <Select defaultValue="desc" style={{ width: 100 }}>
-            <Option value="asc">ASC</Option>
-            <Option value="desc">DESC</Option>
-          </Select>
+          <form onSubmit={formik.handleSubmit}>
+            <Select
+              defaultValue={formik.initialValues.filter}
+              style={{ width: 100 }}
+              onChange={handleFormFilterChange}
+            >
+              <Option value="asc">ASC</Option>
+              <Option value="desc">DESC</Option>
+            </Select>
+          </form>
         </RepoListHeader>
       }
       bordered
