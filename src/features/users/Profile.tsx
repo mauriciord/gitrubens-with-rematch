@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Descriptions, Card, Divider, List, Button, PageHeader } from 'antd';
+import { Descriptions, Card, Divider, PageHeader } from 'antd';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import { Dispatch, iRootState } from '../../state/store';
 import { ProfileProps } from '../../state/profile/types';
 import { Cover, Wrapper } from '../../shared/common/styles';
-import { Repository, RepoList } from '../../state/repos/types';
-import { RepoListActions } from './styles';
+import { RepoList } from '../../state/repos/types';
+import RepositoryList from '../repos/RepositoryList';
 
 const { Meta } = Card;
 
@@ -22,7 +22,6 @@ const Profile = () => {
     (state: iRootState) => state.profile
   );
   const { slug } = useParams();
-  const [reposCurrentPage, setReposCurrentPage] = useState(1);
 
   // LOAD MORE
   // TODO: Extract to a useLoadMore hooks
@@ -46,12 +45,11 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch.profile.fetchProfileInfoByUsername(slug);
-    dispatch.repos.searchReposByUser({ user: slug });
 
     return () => {
       dispatch.profile.cleanProfileAsync();
     };
-  }, [dispatch.repos, dispatch.profile, slug]);
+  }, [dispatch.profile, slug]);
 
   console.log('PROFILE ========/', {
     profileMainInfo,
@@ -59,23 +57,6 @@ const Profile = () => {
     repoList,
     lastPageOfRepos,
   });
-
-  const loadMore =
-    repoListIds.length > 0 &&
-    lastPageOfRepos &&
-    reposCurrentPage < lastPageOfRepos ? (
-      <RepoListActions>
-        <Button
-          onClick={() => {
-            const nextPage = reposCurrentPage + 1;
-            setReposCurrentPage(nextPage);
-            dispatch.repos.searchReposByUser({ user: slug, page: nextPage });
-          }}
-        >
-          load more
-        </Button>
-      </RepoListActions>
-    ) : null;
 
   return (
     <Cover>
@@ -119,36 +100,7 @@ const Profile = () => {
             </Descriptions.Item>
           </Descriptions>
           <Divider orientation="left">Repos</Divider>
-          <List
-            size="small"
-            bordered
-            dataSource={repoListIds}
-            loadMore={loadMore}
-            renderItem={(repoId: number) => {
-              const repository: Repository = repoList[repoId];
-
-              return (
-                <List.Item
-                  actions={[
-                    repository.homepage && (
-                      <a
-                        href={repository.homepage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Homepage
-                      </a>
-                    ),
-                  ]}
-                >
-                  <List.Item.Meta
-                    title={repository.name}
-                    description={repository.html_url}
-                  />
-                </List.Item>
-              );
-            }}
-          />
+          <RepositoryList username={slug} lastPageOfRepos={lastPageOfRepos} />
         </>
       </Wrapper>
     </Cover>
