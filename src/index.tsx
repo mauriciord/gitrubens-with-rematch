@@ -14,7 +14,13 @@ import * as serviceWorker from './serviceWorker';
 
 const persistor = getPersistor();
 
-const GlobalStyle = createGlobalStyle`${normalize()}`;
+const GlobalStyle = createGlobalStyle`
+  ${normalize()}
+
+  input[type="text"] {
+    text-transform: lowercase;
+  }
+`;
 
 ReactDOM.render(
   <React.StrictMode>
