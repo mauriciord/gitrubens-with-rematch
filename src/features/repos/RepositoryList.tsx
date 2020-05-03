@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, List } from 'antd';
+import { Button, List, Select } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { RepoListActions } from './styles';
+import { RepoListActions, RepoListHeader, FilterLabel } from './styles';
 import { Dispatch, iRootState } from '../../state/store';
 import { Repository, RepoList } from '../../state/repos/types';
 
@@ -9,6 +9,8 @@ type RepositoryListProps = {
   lastPageOfRepos?: number;
   username: string;
 };
+
+const { Option } = Select;
 
 const RepositoryList = ({ lastPageOfRepos, username }: RepositoryListProps) => {
   const dispatch = useDispatch<Dispatch>();
@@ -43,6 +45,15 @@ const RepositoryList = ({ lastPageOfRepos, username }: RepositoryListProps) => {
   return (
     <List
       size="small"
+      header={
+        <RepoListHeader>
+          <FilterLabel>Order by:</FilterLabel>
+          <Select defaultValue="desc" style={{ width: 100 }}>
+            <Option value="asc">ASC</Option>
+            <Option value="desc">DESC</Option>
+          </Select>
+        </RepoListHeader>
+      }
       bordered
       dataSource={repoListIds}
       loadMore={loadMore}
