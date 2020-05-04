@@ -8,7 +8,6 @@ import { RepoList } from './types';
 import { FindParams } from '../../services/github/repos';
 
 type State = {
-  // filter: string;
   entities: {
     repos: RepoList;
   };
@@ -17,7 +16,6 @@ type State = {
 
 export const repos = {
   state: {
-    // filter: 'desc',
     entities: { repos: {} },
     result: [],
   },
