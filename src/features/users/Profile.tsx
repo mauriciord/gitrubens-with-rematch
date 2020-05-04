@@ -51,13 +51,6 @@ const Profile = () => {
     };
   }, [dispatch.profile, slug]);
 
-  console.log('PROFILE ========/', {
-    profileMainInfo,
-    repoListIds,
-    repoList,
-    lastPageOfRepos,
-  });
-
   return (
     <Cover>
       <Wrapper>
