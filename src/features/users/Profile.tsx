@@ -7,17 +7,12 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Dispatch, iRootState } from '../../state/store';
 import { ProfileProps } from '../../state/profile/types';
 import { Cover, Wrapper } from '../../shared/common/styles';
-import { RepoList } from '../../state/repos/types';
 import RepositoryList from '../repos/RepositoryList';
 
 const { Meta } = Card;
 
 const Profile = () => {
   const dispatch = useDispatch<Dispatch>();
-  const repoListIds = useSelector((state: iRootState) => state.repos.result);
-  const repoList: RepoList = useSelector(
-    (state: iRootState) => state.repos.entities.repos
-  );
   const profileMainInfo: ProfileProps = useSelector(
     (state: iRootState) => state.profile
   );
