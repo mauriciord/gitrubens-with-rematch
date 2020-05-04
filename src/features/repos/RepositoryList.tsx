@@ -5,7 +5,7 @@ import { RepoListActions, RepoListHeader, FilterLabel } from './styles';
 import { Dispatch, iRootState } from '../../state/store';
 import { Repository, RepoList } from '../../state/repos/types';
 import { useFormik } from 'formik';
-import orderBy from 'lodash.orderby';
+import { sortArray } from '../../shared/helpers';
 
 type RepositoryListProps = {
   lastPageOfRepos?: number;
@@ -26,12 +26,7 @@ const RepositoryList = ({ lastPageOfRepos, username }: RepositoryListProps) => {
       filter: 'desc',
     },
     onSubmit: ({ filter }) => {
-      // @ts-ignore
-      const sortedRepos = orderBy(repoList, ['updated_at'], [filter]);
-
-      dispatch.repos.setSortedReposIds(
-        Object.keys(sortedRepos).map((key: string) => parseInt(key))
-      );
+      dispatch.repos.setSortedReposIds(sortArray(repoListIds, filter));
     },
   });
 
